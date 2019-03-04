@@ -1,6 +1,6 @@
 # crawler proxy
 
-A simple server to help crawl websites and bypass ip blocking or banning, it will download html and render javascript using puppeteer, and return the rendered html.
+A simple server to help crawl websites and bypass ip blocking or banning, it will download html and render javascript using puppeteer, and return the rendered html - protecting your computer/server ip from the target you try to scrape.
 
 Live demo: [return a rendered github page](https://a42-crawler-proxy-1.herokuapp.com/crawl-render/https://github.com), [return an unrendered github page](https://a42-crawler-proxy-1.herokuapp.com/crawl-plain/https://github.com).
 You can use and play around with `a42-crawler-proxy-1`, `a42-crawler-proxy-2`, and `a42-crawler-proxy-3`, they are free dynos so they will be very slow.
