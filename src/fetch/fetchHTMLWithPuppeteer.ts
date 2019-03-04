@@ -8,7 +8,8 @@ const getNewPage = () => {
     }
     return puppeteer.launch({
         ignoreHTTPSErrors: true,
-        args: ['--no-sandbox']
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
     })
         .then((browser) => {
             _browser = browser;

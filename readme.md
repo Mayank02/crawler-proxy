@@ -18,6 +18,7 @@ GET http://localhost:3000/crawl-render/<URL>
 # example:
 
 GET http://localhost:3000/crawl-plain/https://github.com
+GET http://localhost:3000/crawl-render/https://github.com
 ```
 
 Both routes will return plain html, `crawl-plain` is much faster since it doesn't need to run a full scale browser.
@@ -40,6 +41,9 @@ Set buildpacks for the app to run properly on heroku
 heroku buildpacks:set jontewks/puppeteer
 heroku buildpacks:add --index 1 heroku/nodejs
 heroku buildpacks # should output node, and then puppeteer
+
+# if you need asian languages like japanese and korean:
+heroku buildpacks:set https://github.com/CoffeeAndCode/puppeteer-heroku-buildpack.git
 ```
 ```
 heroku open
