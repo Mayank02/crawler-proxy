@@ -123,20 +123,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const puppeteer = __webpack_require__(/*! puppeteer */ "puppeteer");
-// keep the browser alive
+// keep the browser alive as a singleton
 let _browser = null;
-const getNewPage = () => {
-    if (_browser) {
-        return _browser.newPage();
+// get a new browser page, make sure to call .close() when done with it
+const getNewPage = () => __awaiter(this, void 0, void 0, function* () {
+    if (!_browser) {
+        _browser = yield puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox']
+        });
     }
-    return puppeteer.launch({
-        ignoreHTTPSErrors: true
-    })
-        .then((browser) => {
-        _browser = browser;
-        return browser.newPage();
-    });
-};
+    return yield _browser.newPage();
+});
 const fetch = (url) => __awaiter(this, void 0, void 0, function* () {
     const page = yield getNewPage();
     yield page.goto(url, { waitUntil: 'networkidle2' });
@@ -208,9 +206,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = __webpack_require__(/*! express */ "express");
+const express_1 = __webpack_require__(/*! express */ "express");
 const fetch_1 = __webpack_require__(/*! ../fetch/fetch */ "./src/fetch/fetch.ts");
-const router = express.Router();
+const router = express_1.Router();
 const getUrlFrom = (identifier, url) => {
     const index = url.indexOf(identifier) + identifier.length;
     return url.substr(index);

@@ -1,20 +1,16 @@
 const puppeteer = require('puppeteer');
 
-// keep the browser alive
+// keep the browser alive as a singleton
 let _browser = null;
-const getNewPage = () => {
-    if (_browser) {
-        return _browser.newPage();
-    }
-    return puppeteer.launch({
-        ignoreHTTPSErrors: true,
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    })
-        .then((browser) => {
-            _browser = browser;
-            return browser.newPage();
+// get a new browser page, make sure to call .close() when done with it
+const getNewPage = async () => {
+    if (!_browser) {
+        _browser = await  puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox']
         });
+    }
+    return await _browser.newPage();
 };
 
 const fetch = async (url: string) => {
