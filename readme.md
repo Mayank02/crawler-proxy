@@ -59,3 +59,42 @@ chrome-devtools://devtools/bundled/js_app.html?experiments=true&v8only=true&<WEB
 ```
 heroku create --region eu
 ```
+
+### And your client code might look something like this:
+```javascript
+const requestPromise = require('request-promise');
+
+// max time to wait when making requests
+const maxWait = 5 * 1000; // 5 seconds
+
+// list of proxy servers to use
+const proxies = [
+    'https://a42-crawler-proxy-1.herokuapp.com',
+    'https://a42-crawler-proxy-2.herokuapp.com',
+    'https://a42-crawler-proxy-3.herokuapp.com'
+];
+
+// used to prevent recaptcha and bot spamming detection by rotating th ip address
+function getProxy(url, shouldRender) {
+    const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
+    return randomProxy + (shouldRender ? '/crawl-render/' : '/crawl-plain/') + url
+}
+
+// used to prevent recaptcha and bot spamming detection by varying time like e "real" user
+// so rules like "10 requests in 10 seconds" won't apply to us
+async function withRandomTiming(promiseCallback) {
+    const randomTime = Math.random() * maxWait;
+    return await new Promise(async (resolve) => {
+        setTimeout(async () => {
+            const result = await promiseCallback();
+            resolve(result)
+        }, randomTime);
+    })
+}
+
+// fetch some html
+export const fetchHTML = (url) => withRandomTiming(() => requestPromise(getProxy(url, false)))
+
+// fetch some prerendered html
+export const fetchRenderedHTML = (url) => withRandomTiming(() => requestPromise(getProxy(url, true)))
+```
