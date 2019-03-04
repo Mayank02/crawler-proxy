@@ -7,12 +7,13 @@ const getNewPage = () => {
         return _browser.newPage();
     }
     return puppeteer.launch({
-        ignoreHTTPSErrors: true
+        ignoreHTTPSErrors: true,
+        args: ['--no-sandbox']
     })
         .then((browser) => {
             _browser = browser;
             return browser.newPage();
-        })
+        });
 };
 
 const fetch = async (url: string) => {
