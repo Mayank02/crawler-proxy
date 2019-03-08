@@ -66,6 +66,7 @@ const requestPromise = require('request-promise');
 
 // max time to wait when making requests
 const maxWait = 5 * 1000; // 5 seconds
+let proxyNumber = 0;
 
 // list of proxy servers to use
 const proxies = [
@@ -75,9 +76,13 @@ const proxies = [
 ];
 
 // used to prevent recaptcha and bot spamming detection by rotating th ip address
-function getProxy(url, shouldRender) {
-    const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
-    return randomProxy + (shouldRender ? '/crawl-render/' : '/crawl-plain/') + url
+function getProxy(url, shouldRender = false) {
+    const selectedProxy = proxies[proxyNumber];
+    proxyNumber++;
+    if (proxyNumber >= proxies.length) {
+        proxyNumber = 0;
+    }
+    return selectedProxy + (shouldRender ? '/crawl-render/' : '/crawl-plain/') + url
 }
 
 // used to prevent recaptcha and bot spamming detection by varying time like e "real" user
